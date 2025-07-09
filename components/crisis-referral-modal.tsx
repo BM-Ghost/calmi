@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { AlertTriangle, Mail, Phone, Heart, CheckCircle } from "lucide-react"
+import { sendReferralEmail } from "@/lib/email" // Assume this is a function to send the email
 
 interface CrisisReferralModalProps {
   isOpen: boolean
@@ -37,9 +38,7 @@ export default function CrisisReferralModal({
     try {
       const response = await fetch("/api/send-referral", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           userEmail: email,
           conversationReport: conversationHistory,
@@ -48,20 +47,23 @@ export default function CrisisReferralModal({
         }),
       })
 
-      if (response.ok) {
-        const result = await response.json()
+      const result = await response.json()
+
+      if (response.ok && result.success) {
         setProfessional(result.professional)
         setIsSuccess(true)
       } else {
-        throw new Error("Failed to send referral")
+        console.error("Referral failed:", result.error)
+        alert("Failed to send referral. Please try again later.")
       }
     } catch (error) {
-      console.error("Referral error:", error)
-      alert("There was an error sending the referral. Please contact emergency services directly.")
+      console.error("Fetch error:", error)
+      alert("An error occurred while sending the referral. Please try again later.")
     } finally {
       setIsLoading(false)
     }
   }
+
 
   if (isSuccess) {
     return (
@@ -79,12 +81,15 @@ export default function CrisisReferralModal({
               <div className="bg-green-50 p-4 rounded-lg">
                 <h4 className="font-semibold text-green-800">{professional?.name}</h4>
                 <p className="text-sm text-green-700">{professional?.specialty}</p>
-                <p className="text-sm text-green-700 flex items-center gap-1 mt-2">
+
+                {/* Centered phone line */}
+                <div className="flex justify-center items-center gap-1 mt-2 text-sm text-green-700">
                   <Phone className="h-4 w-4" />
-                  {professional?.phone}
-                </p>
+                  <span>{professional?.phone}</span>
+                </div>
               </div>
             </div>
+
 
             <div className="bg-red-50 p-4 rounded-lg">
               <h4 className="font-semibold text-red-800 mb-2">Immediate Help Available:</h4>
