@@ -24,24 +24,24 @@ interface ConversationContext {
 }
 
 export default function ChatInterface() {
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      id: "1",
-      content:
-        "Hello, and welcome to our safe space. I'm **Dr. Calmi**, your dedicated Mental Health Assistant. I'm here to provide you with **compassionate support**, help you process your emotions, and guide you toward **better mental wellness**.\n\nI use a unique approach that combines evidence-based therapeutic techniques with advanced AI to ensure you receive both **empathetic understanding** and **practical solutions**. Our conversation is completely confidential, and I'm equipped with safety protocols to ensure your wellbeing at all times.\n\nI'd like to start by getting to know you better. **How are you feeling today**, and what brings you here to talk with me?",
-      sender: "bot",
-      timestamp: new Date(),
-      analysis: {
-        riskLevel: "low",
-        symptoms: [],
-        sentiment: { score: 0.8, label: "positive" },
-        emotions: [{ emotion: "supportive", confidence: 0.9 }],
-        safetyFlags: [],
-        escalationRequired: false,
-        responseStrategy: "supportive",
-      },
+const [messages, setMessages] = useState<ChatMessage[]>([
+  {
+    id: "1",
+    content:
+      "Hi, I’m **Dr. Calmi**. This is a safe and supportive space where we can talk through whatever's on your mind. Our conversation is private, and I’m here to offer both **empathetic understanding** and **practical guidance**.\n\n**How are you feeling today**, and what would you like to talk about?",
+    sender: "bot",
+    timestamp: new Date(),
+    analysis: {
+      riskLevel: "low",
+      symptoms: [],
+      sentiment: { score: 0.8, label: "positive" },
+      emotions: [{ emotion: "supportive", confidence: 0.9 }],
+      safetyFlags: [],
+      escalationRequired: false,
+      responseStrategy: "supportive",
     },
-  ])
+  },
+])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [showCrisisModal, setShowCrisisModal] = useState(false)
@@ -255,17 +255,7 @@ Remember: You are a mental health professional providing evidence-based support 
       if (analysis.riskLevel === "high") {
         return `I can hear that you're going through something **incredibly difficult** right now, and I want to acknowledge the **courage** it takes to share these feelings with me.\n\nThese emotions you're experiencing are **significant and deserve attention**. Sometimes when we're in pain, it can feel overwhelming and isolating.\n\n**Let's work through this together**. Can you help me understand what specific situation or feelings have been the most challenging for you recently?`
       }
-
-      // Relationship concerns
-      if (
-        lowerMessage.includes("girlfriend") ||
-        lowerMessage.includes("boyfriend") ||
-        lowerMessage.includes("relationship") ||
-        lowerMessage.includes("partner")
-      ) {
-        return `I can sense that you're experiencing **significant concern** about your relationship, and that takes **real courage** to share. Relationship challenges can create intense emotional stress and uncertainty.\n\n**Here's what I want you to consider**: Often, our fears about relationships can amplify our perceptions. The most **powerful tool** you have right now is **honest, open communication**.\n\n**Practical steps you can take**:\n• Focus on expressing your feelings rather than making accusations\n• Listen actively to understand their perspective\n• Consider what you both need to feel secure and valued\n\n**What feels like the most important thing you need to understand or resolve in this situation?**`
-      }
-
+      
       // Anxiety/stress response
       if (analysis.symptoms.some((s: any) => ["anxiety", "stress", "panic"].includes(s.symptom))) {
         return `I recognize that you're experiencing **significant anxiety**, and I want you to know that **these feelings are completely valid**. Anxiety can feel overwhelming, but there are **effective strategies** we can use to help you manage these feelings.\n\n**Immediate coping techniques**:\n• **Deep breathing**: Try the 4-7-8 technique (inhale for 4, hold for 7, exhale for 8)\n• **Grounding**: Name 5 things you can see, 4 you can touch, 3 you can hear\n• **Self-compassion**: Remind yourself that anxiety is temporary and manageable\n\n**What specific situations or thoughts tend to trigger your anxiety most intensely?**`
@@ -306,7 +296,7 @@ Remember: You are a mental health professional providing evidence-based support 
         analysis: {
           riskLevel: "low",
           symptoms: [],
-          sentiment: { score: 0.8, label: "supportive" },
+          sentiment: { score: 0.8, label: "positive" },
           emotions: [{ emotion: "therapeutic", confidence: 0.9 }],
           safetyFlags: [],
           escalationRequired: false,
@@ -392,10 +382,6 @@ Remember: You are a mental health professional providing evidence-based support 
                 <div className="flex items-center gap-2">
                   <Heart className="h-5 w-5 text-pink-600" />
                   <span>Dr. Calmi - Professional Mental Health Support</span>
-                </div>
-                <div className="flex gap-2">
-                  <Badge variant="secondary">Neuro-Symbolic AI</Badge>
-                  <Badge variant="outline">Therapeutic Approach</Badge>
                 </div>
               </CardTitle>
               <Button
@@ -533,9 +519,6 @@ Remember: You are a mental health professional providing evidence-based support 
                 <p>
                   <strong>Messages:</strong> {conversationContext.messageCount}
                 </p>
-                <p>
-                  <strong>AI System:</strong> Neuro-Symbolic (Groq + Rules)
-                </p>
                 {conversationContext.keyTopics.length > 0 && (
                   <p>
                     <strong>Topics:</strong> {conversationContext.keyTopics.join(", ")}
@@ -552,7 +535,7 @@ Remember: You are a mental health professional providing evidence-based support 
                     <Shield className="h-4 w-4" />
                     Risk Assessment
                   </h4>
-                  <Badge className={getRiskColor(messages[messages.length - 2].analysis!.riskLevel)} size="sm">
+                  <Badge className={getRiskColor(messages[messages.length - 2].analysis!.riskLevel)}>
                     {messages[messages.length - 2].analysis!.riskLevel.toUpperCase()} RISK
                   </Badge>
                 </div>
@@ -602,7 +585,7 @@ Remember: You are a mental health professional providing evidence-based support 
 
                 <div>
                   <h4 className="font-semibold mb-2 text-sm">Therapeutic Approach</h4>
-                  <Badge variant="secondary" size="sm" className="bg-purple-100 text-purple-800">
+                  <Badge variant="secondary" className="bg-purple-100 text-purple-800">
                     {messages[messages.length - 2].analysis!.responseStrategy}
                   </Badge>
                 </div>

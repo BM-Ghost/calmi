@@ -155,8 +155,7 @@ This project demonstrates several important AI concepts:
 
 ## 🚨 Important Disclaimers
 
-- This is a **demonstration of AI technology** for educational purposes
-- **Not a substitute** for professional mental health care
+- This is **Not a substitute** for professional mental health care
 - **Crisis situations** require immediate professional intervention
 - **Always consult** qualified healthcare providers for serious concerns
 
